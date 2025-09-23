@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Player Test Suite" parallel="methods" thread-count="1">
+
+    <test name="Player Test Suite">
+        <classes>
+            <class name="com.spribe.api.tests.NegativePlayerTest"/>
+            <class name="com.spribe.api.tests.PositivePlayerTest"/>
+        </classes>
+    </test>
+
+</suite>
