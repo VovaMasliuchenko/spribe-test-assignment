@@ -24,7 +24,9 @@ public class PlayerApi {
                 .then()
                 .log().all()
                 .extract().response();
-        PlayerService.addPlayerIdToRemoveList(String.valueOf(response.jsonPath().getInt("id")));
+        if (response.getStatusCode() == 200) {
+            PlayerService.addPlayerIdToRemoveList(String.valueOf(response.jsonPath().getInt("id")));
+        }
         return response;
     }
 

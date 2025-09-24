@@ -17,7 +17,11 @@ public class ConfigReader {
         }
     }
 
-    public static String getProperty(String key) {
+    public static String getStringProperty(String key) {
         return properties.getProperty(key);
+    }
+
+    public static Integer getIntProperty(String key) {
+        return Integer.parseInt(properties.getProperty(key));
     }
 }

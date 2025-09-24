@@ -12,15 +12,22 @@ repositories {
 
 dependencies {
     // RestAssured
-    testImplementation("io.rest-assured:rest-assured:5.5.0")
-    testImplementation("io.rest-assured:json-schema-validator:5.5.0")
+    implementation("io.rest-assured:rest-assured:5.5.0")
+    implementation("io.rest-assured:json-schema-validator:5.5.0")
 
     // TestNG
-    testImplementation("org.testng:testng:7.11.0")
+    implementation("org.testng:testng:7.11.0")
 
     // Allure
-    testImplementation("io.qameta.allure:allure-testng:2.27.0")
-    testImplementation("io.qameta.allure:allure-rest-assured:2.27.0")
+    implementation("io.qameta.allure:allure-testng:2.27.0")
+    implementation("io.qameta.allure:allure-rest-assured:2.27.0")
+
+    //Logging
+    implementation("org.apache.logging.log4j:log4j-core:2.25.2")
+    implementation("org.apache.logging.log4j:log4j-api:2.25.2")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.25.2")
+    compileOnly("org.apache.logging.log4j:log4j-api:2.25.2")
+    annotationProcessor("org.apache.logging.log4j:log4j-core:2.25.2")
 }
 
 tasks.test {
