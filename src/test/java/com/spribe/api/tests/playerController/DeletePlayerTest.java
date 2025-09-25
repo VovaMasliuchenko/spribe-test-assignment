@@ -6,7 +6,6 @@ import com.spribe.api.models.request.DeletePlayerRequest;
 import com.spribe.config.BaseTest;
 import com.spribe.enums.UserRole;
 import com.spribe.utils.RandomDataUtils;
-import com.spribe.utils.RetryAnalyzer;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
 import io.qameta.allure.Severity;
@@ -31,7 +30,7 @@ public class DeletePlayerTest extends BaseTest {
         Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
         int createdPlayerId = createdPlayerResponse.jsonPath().getInt("id");
 
-        Response deletePlayerResponse = PlayerApi.deletePlayerById(UserRole.SUPERVISOR,
+        Response deletePlayerResponse = PlayerApi.deletePlayerById(UserRole.ADMIN,
                 new DeletePlayerRequest(String.valueOf(createdPlayerId)));
         List<Integer> playerIds = PlayerApi.getAllPlayers().jsonPath().getList("players.id");
 
@@ -45,7 +44,7 @@ public class DeletePlayerTest extends BaseTest {
     public void testNotFoundDeletePlayer() {
         String playerId = RandomStringUtils.randomNumeric(8);
 
-        Response deletePlayerResponse = PlayerApi.deletePlayerById(UserRole.SUPERVISOR,
+        Response deletePlayerResponse = PlayerApi.deletePlayerById(UserRole.ADMIN,
                 new DeletePlayerRequest(playerId));
 
         Assert.assertEquals(deletePlayerResponse.getStatusCode(), 404, "Wrong status code, should be (404 Not Found)");

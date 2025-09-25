@@ -24,4 +24,8 @@ public class ConfigReader {
     public static Integer getIntProperty(String key) {
         return Integer.parseInt(properties.getProperty(key));
     }
+
+    public static boolean getBooleanProperty(String key) {
+        return Boolean.getBoolean(properties.getProperty(key));
+    }
 }

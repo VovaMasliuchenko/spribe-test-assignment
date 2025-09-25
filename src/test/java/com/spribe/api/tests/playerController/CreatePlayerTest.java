@@ -5,7 +5,6 @@ import com.spribe.api.models.request.CreatePlayerRequest;
 import com.spribe.config.BaseTest;
 import com.spribe.enums.UserRole;
 import com.spribe.utils.RandomDataUtils;
-import com.spribe.utils.RetryAnalyzer;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
 import io.qameta.allure.Severity;
@@ -57,10 +56,18 @@ public class CreatePlayerTest extends BaseTest {
         };
     }
 
+    @DataProvider(name = "testCreatePLayerWithAllowedRolesDataProvider")
+    public Object[][] testCreatePLayerWithAllowedRolesDataProvider() {
+        return new Object[][] {
+                { UserRole.ADMIN },
+                { UserRole.SUPERVISOR }
+        };
+    }
+
     @Test(description = "Validate that user CANNOT be created with GET request")
     @Severity(SeverityLevel.CRITICAL)
     @Issue("BUG-1")
-    public void testCreateUserWithGetMethod() {
+    public void testCreatePlayerWithGetMethod() {
         String username = RandomDataUtils.generateUsername();
         String password = RandomDataUtils.generatePassword();
 
@@ -109,10 +116,10 @@ public class CreatePlayerTest extends BaseTest {
                 "API allows creating user with duplicate screen name!");
     }
 
-    @Test(description = "User age out of range should not be created", dataProvider = "outOfRangeAgeDataProvider")
+    @Test(description = "Player age out of range should not be created", dataProvider = "outOfRangeAgeDataProvider")
     @Severity(SeverityLevel.CRITICAL)
     @Issue("BUG-4")
-    public void testUserOutOfRangeAge(int age) {
+    public void testPlayerOutOfRangeAge(int age) {
         String username = RandomDataUtils.generateUsername();
         String password = RandomDataUtils.generatePassword();
 
@@ -200,6 +207,34 @@ public class CreatePlayerTest extends BaseTest {
 
         Assert.assertEquals(createdPlayerResponse.getStatusCode(), 400,
                 "Supervisor role must not be creatable via API");
+    }
+
+    @Test(description = "Validate that players with allowed roles can create users", dataProvider = "testCreatePLayerWithAllowedRolesDataProvider")
+    @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-10")
+    public void testCreatePLayerWithAllowedRoles(UserRole userRole) {
+        String username = RandomDataUtils.generateUsername();
+        String password = RandomDataUtils.generatePassword();
+
+        CreatePlayerRequest createPlayerRequest =
+                new CreatePlayerRequest(20, "male", username, password, UserRole.USER.getRole(), username);
+        Response createdPlayerResponse = PlayerApi.createPlayer(userRole, createPlayerRequest);
+
+        Assert.assertEquals(createdPlayerResponse.getStatusCode(), 200,
+                "User wasn't created with allowed role %s".formatted(userRole.getRole()));
+    }
+
+    @Test(description = "Validate that player with not allowed role CANNOT create users")
+    public void testCreatePLayerWithNotAllowedRole() {
+        String username = RandomDataUtils.generateUsername();
+        String password = RandomDataUtils.generatePassword();
+
+        CreatePlayerRequest createPlayerRequest =
+                new CreatePlayerRequest(20, "male", username, password, UserRole.USER.getRole(), username);
+        Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.USER, createPlayerRequest);
+
+        Assert.assertEquals(createdPlayerResponse.getStatusCode(), 403,
+                "User created with not allowed role %s".formatted(UserRole.USER.getRole()));
     }
 
 }
