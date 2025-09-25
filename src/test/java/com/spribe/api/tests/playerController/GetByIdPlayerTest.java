@@ -8,8 +8,6 @@ import com.spribe.config.BaseTest;
 import com.spribe.enums.UserRole;
 import com.spribe.utils.RandomDataUtils;
 import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -22,7 +20,6 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 public class GetByIdPlayerTest extends BaseTest {
 
     @Test(description = "Validate schema for get player by id")
-    @Severity(SeverityLevel.CRITICAL)
     public void testGetPlayerByIdSchema() {
         String username = RandomDataUtils.generateUsername();
         String password = RandomDataUtils.generatePassword();
@@ -30,7 +27,7 @@ public class GetByIdPlayerTest extends BaseTest {
         CreatePlayerRequest createPlayerRequest =
                 new CreatePlayerRequest(30, "male", username, password, UserRole.USER.getRole(), username);
         Response createPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
-        Response getPlayerByIdResponse = PlayerApi.getPlayerById(new GetPlayerByIdRequest(String.valueOf(createPlayerResponse.jsonPath().getInt("id"))));
+        Response getPlayerByIdResponse = PlayerApi.getPlayerById(new GetPlayerByIdRequest(createPlayerResponse.jsonPath().getInt("id")));
 
         getPlayerByIdResponse.then().body(matchesJsonSchemaInClasspath(PLAYER_SCHEMA));
     }
@@ -45,7 +42,7 @@ public class GetByIdPlayerTest extends BaseTest {
                 new CreatePlayerRequest(30, "male", username, password, UserRole.USER.getRole(), username);
         Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
 
-        Response getPlayerResponse = PlayerApi.getPlayerById(new GetPlayerByIdRequest(String.valueOf(createdPlayerResponse.jsonPath().getInt("id"))));
+        Response getPlayerResponse = PlayerApi.getPlayerById(new GetPlayerByIdRequest(createdPlayerResponse.jsonPath().getInt("id")));
         PlayerResponse playerResponse = getPlayerResponse.jsonPath().getObject("", PlayerResponse.class);
 
         Assert.assertEquals(getPlayerResponse.getStatusCode(), 200, "Wrong status code, user not found!");

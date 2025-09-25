@@ -95,7 +95,7 @@ public class UpdatePlayerTest extends BaseTest {
 
         int secondPlayerId = secondPlayerResponse.jsonPath().getInt("id");
         Response updateSecondPlayerResponse = PlayerApi.updatePlayerById(UserRole.SUPERVISOR, secondPlayerId, updatePlayerRequest);
-        Response getSecondPlayerResponse = PlayerApi.getPlayerById(new GetPlayerByIdRequest(String.valueOf(secondPlayerId)));
+        Response getSecondPlayerResponse = PlayerApi.getPlayerById(new GetPlayerByIdRequest(secondPlayerId));
 
         softAssert.assertEquals(updateSecondPlayerResponse.statusCode(), 409,
                 "Wrong status code for update, player login updated with duplicate value");

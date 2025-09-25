@@ -32,7 +32,7 @@ public class BaseTest {
     public void clearPlayers() {
             List<String> playerIdsToRemove = PlayerService.getPlayerIdsToRemove();
             if (!playerIdsToRemove.isEmpty()) {
-                playerIdsToRemove.forEach(player -> PlayerApi.deletePlayerById(UserRole.ADMIN, new DeletePlayerRequest(player)));
+                playerIdsToRemove.forEach(player -> PlayerApi.deletePlayerById(UserRole.ADMIN, new DeletePlayerRequest(Integer.parseInt(player))));
                 PlayerService.clearList();
             } else {
                 LOGGER.info("There are no players to remove");

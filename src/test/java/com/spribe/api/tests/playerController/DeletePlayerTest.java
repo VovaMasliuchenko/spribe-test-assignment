@@ -31,7 +31,7 @@ public class DeletePlayerTest extends BaseTest {
         int createdPlayerId = createdPlayerResponse.jsonPath().getInt("id");
 
         Response deletePlayerResponse = PlayerApi.deletePlayerById(UserRole.ADMIN,
-                new DeletePlayerRequest(String.valueOf(createdPlayerId)));
+                new DeletePlayerRequest(createdPlayerId));
         List<Integer> playerIds = PlayerApi.getAllPlayers().jsonPath().getList("players.id");
 
         Assert.assertEquals(deletePlayerResponse.getStatusCode(), 204, "Wrong status code, player wasn't deleted!");
@@ -42,7 +42,7 @@ public class DeletePlayerTest extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     @Issue("BUG-8")
     public void testNotFoundDeletePlayer() {
-        String playerId = RandomStringUtils.randomNumeric(8);
+        int playerId = Integer.parseInt(RandomStringUtils.randomNumeric(8));
 
         Response deletePlayerResponse = PlayerApi.deletePlayerById(UserRole.ADMIN,
                 new DeletePlayerRequest(playerId));
