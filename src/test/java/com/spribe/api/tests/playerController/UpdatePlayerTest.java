@@ -7,7 +7,6 @@ import com.spribe.api.models.request.UpdatePlayerRequest;
 import com.spribe.config.BaseTest;
 import com.spribe.enums.UserRole;
 import com.spribe.utils.RandomDataUtils;
-import com.spribe.utils.RetryAnalyzer;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
 import io.qameta.allure.Severity;
@@ -106,7 +105,4 @@ public class UpdatePlayerTest extends BaseTest {
         );
         softAssert.assertAll();
     }
-
-
-
 }
