@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  api-tests:
+    build: .
+    container_name: api-tests
+    volumes:
+      - ./allure-report:/spribe-test-assignment/allure-report
+    tty: true
+    stdin_open: true
