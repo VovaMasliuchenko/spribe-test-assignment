@@ -1,4 +1,4 @@
-package com.spribe.api.tests;
+package com.spribe.api.tests.playerController;
 
 import com.spribe.api.clients.PlayerApi;
 import com.spribe.api.models.request.CreatePlayerRequest;
@@ -6,7 +6,8 @@ import com.spribe.config.BaseTest;
 import com.spribe.enums.UserRole;
 import com.spribe.utils.RandomDataUtils;
 import com.spribe.utils.RetryAnalyzer;
-import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.restassured.response.Response;
@@ -15,14 +16,32 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-@Epic("Player Controller")
-public class NegativePlayerTest extends BaseTest {
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+
+@Feature("Player controller GET create method")
+public class CreatePlayerTest extends BaseTest {
+
+    @DataProvider(name = "validRangeAgeDataProvider")
+    public Object[][] validRangeAgeDataProvider() {
+        return new Object[][] {
+                { 17 },
+                { 59 }
+        };
+    }
 
     @DataProvider(name = "outOfRangeAgeDataProvider")
     public Object[][] outOfRangeAgeDataProvider() {
         return new Object[][] {
-            { "16" },
-            { "60" }
+                { 16 },
+                { 60 }
+        };
+    }
+
+    @DataProvider(name = "testValidGenderDataProvider")
+    public Object[][] testValidGenderDataProvider() {
+        return new Object[][] {
+                { "male" },
+                { "female" }
         };
     }
 
@@ -37,107 +56,145 @@ public class NegativePlayerTest extends BaseTest {
         };
     }
 
-    //Bug №1
-    @Test(description = "Validate that user CANNOT be created with GET request", retryAnalyzer = RetryAnalyzer.class)
+    @Test(description = "Validate that user CANNOT be created with GET request")
     @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-1")
     public void testCreateUserWithGetMethod() {
         String username = RandomDataUtils.generateUsername();
         String password = RandomDataUtils.generatePassword();
 
         CreatePlayerRequest createPlayerRequest =
-                new CreatePlayerRequest("20", "male", username, password, "user", username);
+                new CreatePlayerRequest(20, "male", username, password, UserRole.USER.getRole(), username);
         Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
         Assert.assertEquals(createdPlayerResponse.getStatusCode(), 405,
                 "User was created with GET request. Expected Method Not Allowed (405)");
     }
 
-    //Bug №2
-    @Test(description = "Duplicate login should not be allowed", retryAnalyzer = RetryAnalyzer.class)
+    @Test(description = "Duplicate login should not be allowed")
     @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-2")
     public void testDuplicateLogin() {
         String password = RandomDataUtils.generatePassword();
 
         CreatePlayerRequest createPlayerRequestFirst =
-                new CreatePlayerRequest("30", "male", "duplicateLogin", password, "user", "screen1");
+                new CreatePlayerRequest(30, "male", "duplicateLogin", password, UserRole.USER.getRole(), "screen1");
         Response createdFirstPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequestFirst);
         Assert.assertEquals(createdFirstPlayerResponse.getStatusCode(), 200, "User wasn't successfully created");
 
         CreatePlayerRequest createPlayerRequestSecond =
-                new CreatePlayerRequest("30", "male", "duplicateLogin", password, "user", "screen2");
+                new CreatePlayerRequest(30, "male", "duplicateLogin", password, UserRole.USER.getRole(), "screen2");
         Response createdSecondPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequestSecond);
 
         Assert.assertEquals(createdSecondPlayerResponse.getStatusCode(), 400,
                 "API allows creating user with duplicate login, overwriting existing user!");
     }
 
-    //Bug №3
-    @Test(description = "Duplicate screen name should not be allowed", retryAnalyzer = RetryAnalyzer.class)
+    @Test(description = "Duplicate screen name should not be allowed")
     @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-3")
     public void testDuplicateScreenName() {
         String password = RandomDataUtils.generatePassword();
 
         CreatePlayerRequest createPlayerRequestFirst =
-                new CreatePlayerRequest("30", "male", "login1", password, "user", "screenNameDuplicate");
+                new CreatePlayerRequest(30, "male", "login1", password, UserRole.USER.getRole(), "screenNameDuplicate");
         Response createdFirstPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequestFirst);
         Assert.assertEquals(createdFirstPlayerResponse.getStatusCode(), 200, "User wasn't successfully created");
 
         CreatePlayerRequest createPlayerRequestSecond =
-                new CreatePlayerRequest("30", "male", "Login2", password, "user", "screenNameDuplicate");
+                new CreatePlayerRequest(30, "male", "Login2", password, UserRole.USER.getRole(), "screenNameDuplicate");
         Response createdSecondPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequestSecond);
 
         Assert.assertEquals(createdSecondPlayerResponse.getStatusCode(), 400,
                 "API allows creating user with duplicate screen name!");
     }
 
-    //BUG №4
-    @Test(description = "User age out of range should not be created", dataProvider = "outOfRangeAgeDataProvider", retryAnalyzer = RetryAnalyzer.class)
+    @Test(description = "User age out of range should not be created", dataProvider = "outOfRangeAgeDataProvider")
     @Severity(SeverityLevel.CRITICAL)
-    public void testUserOutOfRangeAge(String age) {
+    @Issue("BUG-4")
+    public void testUserOutOfRangeAge(int age) {
         String username = RandomDataUtils.generateUsername();
         String password = RandomDataUtils.generatePassword();
 
         CreatePlayerRequest createPlayerRequest =
-                new CreatePlayerRequest(age, "male", username, password, "user", username);
+                new CreatePlayerRequest(age, "male", username, password, UserRole.USER.getRole(), username);
         Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
 
         Assert.assertEquals(createdPlayerResponse.getStatusCode(), 400,
                 "Incorrect status code for user age %s, valid range is [17-59]".formatted(age));
     }
 
-    //BUG №5
-    @Test(description = "Validate that password matches the requirements", dataProvider = "testInvalidPasswordDataProvider", retryAnalyzer = RetryAnalyzer.class)
+    @Test(description = "Validate that password matches the requirements", dataProvider = "testInvalidPasswordDataProvider")
     @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-5")
     public void testInvalidPassword(String password) {
         String username = RandomDataUtils.generateUsername();
 
         CreatePlayerRequest createPlayerRequest =
-                new CreatePlayerRequest("30", "male", username, password, "user", username);
+                new CreatePlayerRequest(30, "male", username, password, UserRole.USER.getRole(), username);
         Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
 
         Assert.assertEquals(createdPlayerResponse.getStatusCode(), 400, "User was created with invalid password!");
     }
 
-    //BUG №6
-    @Test(description = "Validate gender can only be male or female", retryAnalyzer = RetryAnalyzer.class)
+    @Test(description = "Validate gender can only be male or female")
     @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-6")
     public void testInvalidGender() {
         String username = RandomDataUtils.generateUsername();
         String password = RandomDataUtils.generatePassword();
 
         CreatePlayerRequest createPlayerRequest =
-                new CreatePlayerRequest("30", "other", username, password, "user", username);
+                new CreatePlayerRequest(30, "other", username, password, UserRole.USER.getRole(), username);
         Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
 
         Assert.assertEquals(createdPlayerResponse.getStatusCode(), 400, "Expected error for invalid gender value");
     }
 
-    @Test(description = "Supervisor role should not be allowed at creation", retryAnalyzer = RetryAnalyzer.class)
+    @Test(description = "Validate schema of player creation")
+    @Severity(SeverityLevel.CRITICAL)
+    @Issue("BUG-7")
+    public void testCreatePlayerSchema() {
+        String username = RandomDataUtils.generateUsername();
+        String password = RandomDataUtils.generatePassword();
+
+        CreatePlayerRequest createPlayerRequest =
+                new CreatePlayerRequest(30, "male", username, password, UserRole.USER.getRole(), username);
+        Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
+        createdPlayerResponse.then().body(matchesJsonSchemaInClasspath("jsonSchemas/PlayerResponse.json"));
+    }
+
+    @Test(description = "User with valid age (17-59) should be created successfully", dataProvider = "validRangeAgeDataProvider")
+    @Severity(SeverityLevel.CRITICAL)
+    public void testValidAge(int age) {
+        String username = RandomDataUtils.generateUsername();
+        String password = RandomDataUtils.generatePassword();
+
+        CreatePlayerRequest createPlayerRequest =
+                new CreatePlayerRequest(age, "male", username, password, UserRole.USER.getRole(), username);
+        Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
+
+        Assert.assertEquals(createdPlayerResponse.getStatusCode(), 200, "Incorrect status code for create user");
+    }
+
+    @Test(description = "Validate player can be created with gender male or female", dataProvider = "testValidGenderDataProvider")
+    public void testValidGender(String gender) {
+        String username = RandomDataUtils.generateUsername();
+        String password = RandomDataUtils.generatePassword();
+
+        CreatePlayerRequest createPlayerRequest =
+                new CreatePlayerRequest(30, gender, username, password, UserRole.USER.getRole(), username);
+        Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
+
+        Assert.assertEquals(createdPlayerResponse.getStatusCode(), 200, "User with valid gender wasn't created!");
+    }
+
+    @Test(description = "Supervisor role should not be allowed at creation")
     public void testSupervisorRoleCreation() {
         String username = RandomDataUtils.generateUsername();
         String password = RandomDataUtils.generatePassword();
 
         CreatePlayerRequest createPlayerRequest =
-                new CreatePlayerRequest("30", "male", username, password, "supervisor", username);
+                new CreatePlayerRequest(30, "male", username, password, UserRole.SUPERVISOR.getRole(), username);
         Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
 
         Assert.assertEquals(createdPlayerResponse.getStatusCode(), 400,
