@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class CreatePlayerRequest {
 
-    private String age;
+    private int age;
 
     private String gender;
 
@@ -17,7 +17,7 @@ public class CreatePlayerRequest {
 
     private String screenName;
 
-    public CreatePlayerRequest(String age, String gender, String login, @Nullable String password, String role, String screenName) {
+    public CreatePlayerRequest(int age, String gender, String login, @Nullable String password, String role, String screenName) {
         this.age = age;
         this.gender = gender;
         this.login = login;
@@ -28,11 +28,11 @@ public class CreatePlayerRequest {
 
     public CreatePlayerRequest() {}
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 

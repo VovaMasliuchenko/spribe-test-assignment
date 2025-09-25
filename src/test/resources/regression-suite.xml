@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.1.dtd">
-<suite name="Player Test Suite" parallel="methods" thread-count="1">
+<suite name="Player Test Suite" parallel="methods" thread-count="3">
+
+    <listeners>
+        <listener class-name="com.spribe.utils.RetryListener"/>
+    </listeners>
 
     <test name="Player Test Suite">
         <classes>
-            <class name="com.spribe.api.tests.NegativePlayerTest"/>
-            <class name="com.spribe.api.tests.PositivePlayerTest"/>
+            <class name="com.spribe.api.tests.playerController.CreatePlayerTest"/>
+            <class name="com.spribe.api.tests.playerController.DeletePlayerTest"/>
+            <class name="com.spribe.api.tests.playerController.GetAllPlayersTest"/>
+            <class name="com.spribe.api.tests.playerController.GetByIdPlayerTest"/>
+            <class name="com.spribe.api.tests.playerController.UpdatePlayerTest"/>
         </classes>
     </test>
 

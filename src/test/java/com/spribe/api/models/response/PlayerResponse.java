@@ -1,23 +1,26 @@
-package com.spribe.api.models.request;
+package com.spribe.api.models.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import javax.annotation.Nullable;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class UpdatePlayerRequest {
+public class PlayerResponse {
 
-    public int age;
+    private int id;
 
-    public String gender;
+    private int age;
 
-    public String login;
+    private String gender;
 
-    public String password;
+    private String login;
 
-    public String role;
+    @Nullable
+    private String password;
 
-    public String screenName;
+    private String role;
 
-    public UpdatePlayerRequest(int age, String gender, String login, String password, String role, String screenName) {
+    private String screenName;
+
+    public PlayerResponse(int id, int age, String gender, String login, @Nullable String password, String role, String screenName) {
+        this.id = id;
         this.age = age;
         this.gender = gender;
         this.login = login;
@@ -26,7 +29,15 @@ public class UpdatePlayerRequest {
         this.screenName = screenName;
     }
 
-    public UpdatePlayerRequest() {}
+    public PlayerResponse() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getAge() {
         return age;
@@ -52,11 +63,12 @@ public class UpdatePlayerRequest {
         this.login = login;
     }
 
+    @Nullable
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@Nullable String password) {
         this.password = password;
     }
 
@@ -75,5 +87,4 @@ public class UpdatePlayerRequest {
     public void setScreenName(String screenName) {
         this.screenName = screenName;
     }
-
 }

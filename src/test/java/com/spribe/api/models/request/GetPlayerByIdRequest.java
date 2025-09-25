@@ -2,19 +2,19 @@ package com.spribe.api.models.request;
 
 public class GetPlayerByIdRequest {
 
-    private String playerId;
+    private int playerId;
 
-    public GetPlayerByIdRequest(String playerId) {
+    public GetPlayerByIdRequest(int playerId) {
         this.playerId = playerId;
     }
 
     public GetPlayerByIdRequest() {}
 
-    public String getPlayerId() {
+    public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(String playerId) {
+    public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
 

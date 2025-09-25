@@ -3,6 +3,7 @@ package com.spribe.api.clients;
 import com.spribe.api.models.request.CreatePlayerRequest;
 import com.spribe.enums.UserRole;
 import com.spribe.service.PlayerService;
+import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -10,6 +11,7 @@ import static io.restassured.RestAssured.given;
 
 public class PlayerApi {
 
+    @Step("Creating player GET /player/create")
     public static Response createPlayer(UserRole role, CreatePlayerRequest body) {
         Response response = given()
                 .contentType(ContentType.JSON)
@@ -30,6 +32,7 @@ public class PlayerApi {
         return response;
     }
 
+    @Step("Getting player by ID POST /player/get")
     public static Response getPlayerById(Object body) {
         return given()
                 .contentType(ContentType.JSON)
@@ -41,6 +44,7 @@ public class PlayerApi {
                 .extract().response();
     }
 
+    @Step("Getting all players GET /player/get/all")
     public static Response getAllPlayers() {
         return given()
                 .contentType(ContentType.JSON)
@@ -51,6 +55,7 @@ public class PlayerApi {
                 .extract().response();
     }
 
+    @Step("Update player by ID PATCH /player/update")
     public static Response updatePlayerById(UserRole role, int id, Object body) {
         return given()
                 .contentType(ContentType.JSON)
@@ -62,6 +67,7 @@ public class PlayerApi {
                 .extract().response();
     }
 
+    @Step("Delete player by ID DELETE /player/delete")
     public static Response deletePlayerById(UserRole role, Object body) {
         return given()
                 .contentType(ContentType.JSON)
@@ -72,5 +78,4 @@ public class PlayerApi {
                 .log().all()
                 .extract().response();
     }
-
 }

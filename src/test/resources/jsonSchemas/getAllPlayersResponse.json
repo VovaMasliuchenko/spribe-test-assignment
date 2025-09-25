@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GetAllPlayersResponse",
+  "type": "object",
+  "properties": {
+    "players": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "screenName": { "type": "string" },
+          "gender": { "type": "string" },
+          "age": { "type": "integer" }
+        },
+        "required": ["id", "screenName", "gender", "age"]
+      }
+    }
+  },
+  "required": ["players"]
+}
