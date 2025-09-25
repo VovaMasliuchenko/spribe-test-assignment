@@ -6,7 +6,7 @@ Framework built with Java 11, TestNG, and RestAssured.
 ---
 
 ## Features
-- Positive and negative test coverage for all endpoints
+- Positive and negative test coverage for player endpoint
 - Critical bug detection with automated tests
 - Configurable test execution (threads, base URL)
 - Allure reporting
