@@ -11,7 +11,8 @@ Framework built with Java 11, TestNG, and RestAssured.
 - Configurable test execution (threads, base URL)
 - Allure reporting
 - Logging implemented
-- Run tests anywhere using Docker – all dependencies included.
+- Run tests anywhere using Docker – all dependencies included
+- Automated CI/CD with GitHub Actions – builds project on push and pull request
 
 ---
 
