@@ -11,6 +11,7 @@ Framework built with Java 11, TestNG, and RestAssured.
 - Configurable test execution (threads, base URL)
 - Allure reporting
 - Logging implemented
+- Run tests anywhere using Docker – all dependencies included.
 
 ---
 
@@ -31,23 +32,38 @@ Framework built with Java 11, TestNG, and RestAssured.
 
 ---
 
-## Setup
-1. Clone repository:
+## Setup manually or using docker
+
+   Clone repository:
    ```bash
    git clone <repo-url>
    cd spribe-test-assignment
    ```
-2. Update config.properties if needed (base URL, retry count)  
 
-3. Run tests:
+# Manually:  
+
+1. Update config.properties if needed (base URL, retry count)  
+
+2. Run tests:
   ```bash
   ./gradlew clean test
   ```
 
-4. Generate Allure report:  
+3. Generate Allure report:  
   ```bash
   allure serve build/allure-results
   ```
+
+---
+
+# Using docker:  
+
+1. Run command:
+ ```bash
+   docker-compose build
+   docker-compose up
+   ```
+2. Then open index.html file from allure-report package in browser
 
 ---
 
