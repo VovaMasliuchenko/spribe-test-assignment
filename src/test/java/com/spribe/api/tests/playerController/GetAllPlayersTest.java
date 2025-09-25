@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.spribe.utils.Constants.JsonSchemasPath.ALL_PLAYERS_SCHEMA;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @Feature("Player controller GET all method")
@@ -33,7 +34,7 @@ public class GetAllPlayersTest extends BaseTest {
         }
         Response getAllPlayersResponse = PlayerApi.getAllPlayers();
 
-        getAllPlayersResponse.then().body(matchesJsonSchemaInClasspath("jsonSchemas/getAllPlayersResponse.json"));
+        getAllPlayersResponse.then().body(matchesJsonSchemaInClasspath(ALL_PLAYERS_SCHEMA));
     }
 
     @Test(description = "Validate get all users functionality")

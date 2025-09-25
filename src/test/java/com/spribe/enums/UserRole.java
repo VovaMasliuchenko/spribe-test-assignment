@@ -3,7 +3,9 @@ package com.spribe.enums;
 public enum UserRole {
 
     ADMIN("admin"),
+
     USER("user"),
+
     SUPERVISOR("supervisor");
 
     private final String role;

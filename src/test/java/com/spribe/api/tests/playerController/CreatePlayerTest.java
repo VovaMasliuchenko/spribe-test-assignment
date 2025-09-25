@@ -16,6 +16,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static com.spribe.utils.Constants.JsonSchemasPath.PLAYER_SCHEMA;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @Feature("Player controller GET create method")
@@ -160,7 +161,7 @@ public class CreatePlayerTest extends BaseTest {
         CreatePlayerRequest createPlayerRequest =
                 new CreatePlayerRequest(30, "male", username, password, UserRole.USER.getRole(), username);
         Response createdPlayerResponse = PlayerApi.createPlayer(UserRole.SUPERVISOR, createPlayerRequest);
-        createdPlayerResponse.then().body(matchesJsonSchemaInClasspath("jsonSchemas/PlayerResponse.json"));
+        createdPlayerResponse.then().body(matchesJsonSchemaInClasspath(PLAYER_SCHEMA));
     }
 
     @Test(description = "User with valid age (17-59) should be created successfully", dataProvider = "validRangeAgeDataProvider")
