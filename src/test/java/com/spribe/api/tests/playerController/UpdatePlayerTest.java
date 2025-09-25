@@ -34,7 +34,7 @@ public class UpdatePlayerTest extends BaseTest {
         };
     }
 
-    @Test(description = "Validate schema of update player")
+    @Test(description = "Validate schema for update player")
     public void testUpdatePlayerSchema() {
         String username = RandomDataUtils.generateUsername();
         String password = RandomDataUtils.generatePassword();
